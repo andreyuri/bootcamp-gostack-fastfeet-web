@@ -6,6 +6,9 @@ import SignIn from '~/pages/SignIn';
 import SignUp from '~/pages/SignUp';
 
 import Delivery from '~/pages/Delivery';
+import Deliveryman from '~/pages/Deliveryman';
+import Recipient from '~/pages/Recipient';
+import Problems from '~/pages/Problems';
 
 export default function Routes() {
   return (
@@ -14,6 +17,9 @@ export default function Routes() {
       <Route path="/register" component={SignUp} />
 
       <Route path="/delivery" component={Delivery} isPrivate />
+      <Route path="/deliveryman" component={Deliveryman} isPrivate />
+      <Route path="/recipient" component={Recipient} isPrivate />
+      <Route path="/problems" component={Problems} isPrivate />
     </Switch>
   );
 }

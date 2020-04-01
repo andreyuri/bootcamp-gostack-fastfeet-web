@@ -2,6 +2,6 @@ import React from 'react';
 
 // import { Container } from './styles';
 
-export default function Delivery() {
-  return <h1>Delivery</h1>;
+export default function Deliveryman() {
+  return <h1>Deliveryman</h1>;
 }
