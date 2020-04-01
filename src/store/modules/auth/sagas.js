@@ -8,7 +8,7 @@ import { signInSuccess } from './actions';
 export function* signIn({ payload }) {
   const { email, password } = payload;
 
-  const response = yield call(api.get, '/sessions', {
+  const response = yield call(api.post, '/sessions', {
     email,
     password,
   });
