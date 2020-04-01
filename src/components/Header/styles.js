@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { darken } from 'polished';
 
 import colors from '~/styles/colors';
 
@@ -33,9 +32,10 @@ export const Content = styled.div`
       text-transform: uppercase;
       color: #999;
       transition: color 0.2s;
+      font-size: 12px;
 
       & + a {
-        margin-left: 10px;
+        margin-left: 25px;
       }
 
       &.active {
