@@ -12,6 +12,13 @@ export const Container = styled.div`
   h1 {
     font-size: 24px;
   }
+
+  form {
+    background: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 4px;
+  }
 `;
 
 export const Header = styled.header`
@@ -65,21 +72,28 @@ export const Button = styled(Link)`
     `}
 `;
 
-export const RegisterBody = styled.div`
-  margin-top: 30px;
-  background: #fff;
-  padding: 30px 30px;
+export const InputLine = styled.div`
+  display: flex;
+  flex-direction: column;
 
   label {
     font-weight: bold;
-    text-transform: capitalize;
+    margin-bottom: 7px;
   }
 
-  input {
-    padding: 10px;
+  > div {
+    margin-bottom: 10px;
+  }
+
+  > input {
+    height: 34px;
     border-radius: 4px;
-    border: 1px solid #eee;
-    width: 100%;
-    margin-top: 12px;
+    border: 1px solid #cccccc;
+    padding: 10px;
+    transition: border 0.2s;
+
+    &:hover {
+      border: 1px solid #b3b3b3;
+    }
   }
 `;

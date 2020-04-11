@@ -1,10 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { MdArrowBack, MdCheck } from 'react-icons/md';
+import Async from 'react-select/async';
 
-import { Container, Header, Button, RegisterBody } from './styles';
+import api from '~/services/api';
+
+import { Container, Header, Button, InputLine } from './styles';
 
 export default function Register() {
+  const [recipients, setRecipients] = useState([]);
+  const [deliverymans, setDeliverymans] = useState([]);
+
+  useEffect(() => {
+    async function loadRecipients() {
+      const response = await api.get('/recipients');
+
+      const data = response.data.map((r) => ({
+        ...r,
+        label: r.name,
+        value: r.name,
+      }));
+
+      setRecipients(data);
+    }
+
+    async function loadDeliverymans() {
+      const response = await api.get('/deliverymans');
+
+      const data = response.data.map((r) => ({
+        ...r,
+        label: r.name,
+        value: r.name,
+      }));
+
+      setDeliverymans(data);
+    }
+
+    loadRecipients();
+    loadDeliverymans();
+  }, []);
+
   return (
     <Container>
       <Header>
@@ -21,24 +56,28 @@ export default function Register() {
         </div>
       </Header>
 
-      <RegisterBody>
-        <Form>
-          <div>
-            <label htmlFor="recipient">Destinatário</label>
-            <Input
-              id="recipient"
-              name="recipient"
-              type="text"
-              placeholder="Nome do destinatário"
-            />
-            <label htmlFor="deliveryman">Entregador</label>
-            <Input
-              id="deliveryman"
-              name="deliveryman"
-              type="text"
-              placeholder="Nome do entregador"
-            />
-          </div>
+      <Form>
+        <InputLine>
+          <label htmlFor="recipient">Destinatário</label>
+          <Async
+            id="recipient"
+            name="recipient"
+            cacheOptions
+            defaultOptions={recipients}
+            placeholder="Nome do destinatário"
+            isSearchable={false}
+          />
+          <label htmlFor="deliveryman">Entregador</label>
+          <Async
+            id="deliveryman"
+            name="deliveryman"
+            cacheOptions
+            defaultOptions={deliverymans}
+            placeholder="Nome do entregador"
+            isSearchable={false}
+          />
+        </InputLine>
+        <InputLine>
           <label htmlFor="product">Nome do produto</label>
           <Input
             id="product"
@@ -46,8 +85,8 @@ export default function Register() {
             type="text"
             placeholder="Nome do produto"
           />
-        </Form>
-      </RegisterBody>
+        </InputLine>
+      </Form>
     </Container>
   );
 }
