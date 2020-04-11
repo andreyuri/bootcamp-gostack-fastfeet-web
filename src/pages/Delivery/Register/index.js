@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Form, Input } from '@rocketseat/unform';
 import { MdArrowBack, MdCheck } from 'react-icons/md';
-import Async from 'react-select/async';
 
 import api from '~/services/api';
+import history from '~/services/history';
+import AsyncSelect from '~/components/AsyncSelect';
 
-import { Container, Header, Button, InputLine } from './styles';
+import { Container, Header, Button, Content, InputLine } from './styles';
 
 export default function Register() {
+  const formRef = useRef(null);
   const [recipients, setRecipients] = useState([]);
   const [deliverymans, setDeliverymans] = useState([]);
 
@@ -40,52 +42,61 @@ export default function Register() {
     loadDeliverymans();
   }, []);
 
+  function handleSubmit(data) {
+    console.tron.error(data);
+  }
+
+  function goHome() {
+    history.push('/delivery');
+  }
+
   return (
     <Container>
-      <Header>
-        <h1>Cadastro de encomendas</h1>
-        <div>
-          <Button type="button" to="/delivery" back>
-            <MdArrowBack size={24} color="#fff" />
-            Voltar
-          </Button>
-          <Button type="button" save>
-            <MdCheck size={24} color="#fff" />
-            Salvar
-          </Button>
-        </div>
-      </Header>
-
-      <Form>
-        <InputLine>
-          <label htmlFor="recipient">Destinatário</label>
-          <Async
-            id="recipient"
-            name="recipient"
-            cacheOptions
-            defaultOptions={recipients}
-            placeholder="Nome do destinatário"
-            isSearchable={false}
-          />
-          <label htmlFor="deliveryman">Entregador</label>
-          <Async
-            id="deliveryman"
-            name="deliveryman"
-            cacheOptions
-            defaultOptions={deliverymans}
-            placeholder="Nome do entregador"
-            isSearchable={false}
-          />
-        </InputLine>
-        <InputLine>
-          <label htmlFor="product">Nome do produto</label>
-          <Input
-            id="product"
-            name="product"
-            type="text"
-            placeholder="Nome do produto"
-          />
-        </InputLine>
+      <Form ref={formRef} onSubmit={handleSubmit}>
+        <Header>
+          <h1>Cadastro de encomendas</h1>
+          <div>
+            <Button type="button" onClick={goHome} back>
+              <MdArrowBack size={24} color="#fff" />
+              Voltar
+            </Button>
+            <Button type="submit" save>
+              <MdCheck size={24} color="#fff" />
+              Salvar
+            </Button>
+          </div>
+        </Header>
+        <Content>
+          <InputLine>
+            <label htmlFor="recipient">Destinatário</label>
+            <AsyncSelect
+              id="recipient"
+              name="recipient"
+              cacheOptions
+              defaultOptions={recipients}
+              placeholder="Nome do destinatário"
+              isSearchable={false}
+            />
+            <label htmlFor="deliveryman">Entregador</label>
+            <AsyncSelect
+              id="deliveryman"
+              name="deliveryman"
+              cacheOptions
+              defaultOptions={deliverymans}
+              placeholder="Nome do entregador"
+              isSearchable={false}
+            />
+          </InputLine>
+          <InputLine>
+            <label htmlFor="product">Nome do produto</label>
+            <Input
+              id="product"
+              name="product"
+              type="text"
+              placeholder="Nome do produto"
+            />
+          </InputLine>
+        </Content>
       </Form>
     </Container>
   );

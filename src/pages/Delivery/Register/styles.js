@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import { darken } from 'polished';
-import { Link } from 'react-router-dom';
 
 import colors from '~/styles/colors';
 
@@ -11,13 +10,6 @@ export const Container = styled.div`
 
   h1 {
     font-size: 24px;
-  }
-
-  form {
-    background: #fff;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 4px;
   }
 `;
 
@@ -31,7 +23,14 @@ export const Header = styled.header`
   }
 `;
 
-export const Button = styled(Link)`
+export const Content = styled.div`
+  background: #fff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 4px;
+`;
+
+export const Button = styled.button`
   border: 0;
   color: #fff;
   padding: 5px 20px;
@@ -47,7 +46,7 @@ export const Button = styled(Link)`
     padding-right: 5px;
   }
 
-  & + a {
+  & + button {
     margin-left: 15px;
   }
 
