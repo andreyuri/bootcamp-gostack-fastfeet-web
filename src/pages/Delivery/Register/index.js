@@ -1,14 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
 import { MdArrowBack, MdCheck } from 'react-icons/md';
 
 import api from '~/services/api';
 import history from '~/services/history';
 import AsyncSelect from '~/components/AsyncSelect';
+import { addDeliveryRequest } from '~/store/modules/delivery/actions';
 
 import { Container, Header, Button, Content, InputLine } from './styles';
 
 export default function Register() {
+  const dispatch = useDispatch();
   const formRef = useRef(null);
   const [recipients, setRecipients] = useState([]);
   const [deliverymans, setDeliverymans] = useState([]);
@@ -43,7 +46,7 @@ export default function Register() {
   }, []);
 
   function handleSubmit(data) {
-    console.tron.error(data);
+    dispatch(addDeliveryRequest(data));
   }
 
   function goHome() {
