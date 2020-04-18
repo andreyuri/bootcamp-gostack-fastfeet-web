@@ -7,8 +7,10 @@ import {
   MdEdit,
   MdDelete,
 } from 'react-icons/md';
+import { Button, MenuItem } from '@material-ui/core';
 
 import api from '~/services/api';
+import SimpleModal from '~/components/SimpleModal';
 
 import {
   Container,
@@ -17,26 +19,42 @@ import {
   Table,
   Deliveryman,
   Status,
-  Actions,
-  ActionsButton,
-  ActionList,
   ActionButton,
+  ModalBody,
+  ModalBodyTextHighlight,
+  StyledMenu,
 } from './styles';
 
 export default function Delivery() {
   const [delivery, setDelivery] = useState([]);
+  const [searchText, setSearchText] = useState('');
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleOpenModal = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  function treatDeliveryResponse(deliveries) {
+    const data = deliveries.map((d) => ({
+      ...d,
+      actionsVisible: false,
+      firstLetters:
+        d.deliveryman.name.split(' ')[0].substring(0, 1) +
+        d.deliveryman.name.split(' ')[1].substring(0, 1),
+    }));
+    return data;
+  }
 
   useEffect(() => {
     async function loadDelivery() {
       const response = await api.get('/deliveries');
 
-      const data = response.data.map((d) => ({
-        ...d,
-        actionsVisible: false,
-        firstLetters:
-          d.deliveryman.name.split(' ')[0].substring(0, 1) +
-          d.deliveryman.name.split(' ')[1].substring(0, 1),
-      }));
+      const data = treatDeliveryResponse(response.data);
 
       setDelivery(data);
     }
@@ -44,26 +62,32 @@ export default function Delivery() {
     loadDelivery();
   }, []);
 
-  function handleToggleVisible(id) {
-    setDelivery(
-      delivery.map((d) => {
-        if (d.id === id) {
-          d.actionsVisible = !d.actionsVisible;
-        } else {
-          d.actionsVisible = false;
-        }
+  function handleChangeSearchText(e) {
+    setSearchText(e.target.value);
+  }
 
-        return d;
-      })
-    );
+  async function handleSearchSubmit(e) {
+    e.preventDefault();
+    const response = await api.get('/deliveries', {
+      params: {
+        q: searchText,
+      },
+    });
+
+    setDelivery(treatDeliveryResponse(response.data));
   }
 
   return (
     <Container>
       <header>
         <h1>Gerenciando encomendas</h1>
-        <HeaderBody>
-          <input type="text" placeholder="Buscar por encomendas" />
+        <HeaderBody onSubmit={handleSearchSubmit}>
+          <input
+            type="text"
+            value={searchText}
+            onChange={handleChangeSearchText}
+            placeholder="Buscar por encomendas"
+          />
           <AddButton type="button" to="/delivery/register">
             <MdAdd size={18} color="#fff" />
             Cadastrar
@@ -105,23 +129,55 @@ export default function Delivery() {
                 </Status>
               </td>
               <td>
-                <Actions>
-                  <ActionsButton onClick={() => handleToggleVisible(item.id)}>
-                    <MdMoreHoriz size={24} color="black" />
-                  </ActionsButton>
-
-                  <ActionList visible={item.actionsVisible}>
-                    <ActionButton>
-                      <MdVisibility size={12} color="purple" /> Visualizar
-                    </ActionButton>
+                <Button
+                  aria-controls="simple-menu"
+                  aria-haspopup="true"
+                  onClick={handleOpenModal}
+                >
+                  <MdMoreHoriz size={24} color="black" />
+                </Button>
+                <StyledMenu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>
+                    {' '}
+                    <SimpleModal
+                      openButtonContent={
+                        <>
+                          <MdVisibility size={12} color="purple" /> Visualizar
+                        </>
+                      }
+                      bodyContent={
+                        <ModalBody>
+                          <ModalBodyTextHighlight>
+                            Informações da encomenda
+                          </ModalBodyTextHighlight>
+                          <p>
+                            {item.recipient.street}, {item.recipient.number}
+                          </p>
+                          <p>
+                            {item.recipient.city} - {item.recipient.state}
+                          </p>
+                          <p>{item.recipient.postal_code}</p>
+                        </ModalBody>
+                      }
+                    />
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
                     <ActionButton>
                       <MdEdit size={12} color="blue" /> Editar
                     </ActionButton>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
                     <ActionButton>
                       <MdDelete size={12} color="red" /> Excluir
                     </ActionButton>
-                  </ActionList>
-                </Actions>
+                  </MenuItem>
+                </StyledMenu>
               </td>
             </tr>
           ))}

@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { darken, lighten } from 'polished';
+import { Menu } from '@material-ui/core';
 
 import colors from '~/styles/colors';
 
@@ -18,7 +19,7 @@ export const Container = styled.div`
   }
 `;
 
-export const HeaderBody = styled.div`
+export const HeaderBody = styled.form`
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
@@ -153,59 +154,31 @@ export const Status = styled.span`
     `}
 `;
 
-export const Actions = styled.div`
-  position: relative;
-`;
-
-export const ActionsButton = styled.button.attrs({
-  type: 'button',
-})`
-  background: none;
-  border: 0;
-  position: relative;
-`;
-
-export const ActionList = styled.div`
-  position: absolute;
-  width: 150px;
-  left: calc(77% - 75px);
-  top: calc(100% + 7px);
-  background: #e4e4e4;
-  border-radius: 4px;
-  border: 1px solid #eee;
-
-  display: ${(props) => (props.visible ? 'flex' : 'none')};
-  flex-direction: column;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: calc(43% - 8px);
-    top: -20px;
-    width: 0;
-    height: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-bottom: 20px solid #e4e4e4;
-  }
-`;
-
 export const ActionButton = styled.button`
   background: none;
   border: 0;
-  padding: 10px 0;
-  text-align: left;
-  transition: background 0.2s;
-
-  &:hover {
-    background: ${darken(0.08, '#e4e4e4')};
-  }
 
   svg {
-    margin: 0 8px;
+    margin-right: 3px;
   }
+`;
 
-  & + button {
-    border-top: 1px solid #eee;
+export const ModalBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-transform: capitalize;
+
+  p {
+    margin-bottom: 8px;
   }
+`;
+
+export const ModalBodyTextHighlight = styled.p`
+  font-weight: bold;
+  text-transform: initial;
+`;
+
+export const StyledMenu = styled(Menu)`
+  box-shadow: 1px black !important;
 `;
